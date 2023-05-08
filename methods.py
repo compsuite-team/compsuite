@@ -14,17 +14,25 @@ def showInfomation(id):
 
 
 def downloadTargetClient(id):
-    k = findIncompatibilityById(id)
+    incomp = findIncompatibilityById(id)
 
-    client, sha, url = k['client'], k['sha'], k['url']
+    client, lib, sha, url = incomp['client'], incomp['lib'], incomp['sha'], incomp['url']
 
     print('===> Download Target Client --- id', id)
     os.chdir(REPO_DIR)
     CURRENT_CLIENT = REPO_DIR + '/' + client
     if not os.path.exists(CURRENT_CLIENT):
-        sub.run('git clone ' + url, shell=True)
+        sub.run(f'git clone {url}', shell=True)
+    else:
+        print(f'{client} has already downloaded')
     os.chdir(CURRENT_CLIENT)
-    sub.run('git checkout ' + sha, shell=True)
+    branch = lib.replace(':', '--')
+    sub.run(f'git checkout {branch}', shell=True)
+    sub.run('git checkout .', shell=True)
+    print('===> Client Info --- id', id)
+    print(f"Client: {client}")
+    print(f"Current Branch: {branch}")
+    print(f"SHA of Base Version: {sha}")
 
 
 def compileTargetClient(id):
