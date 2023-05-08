@@ -11,7 +11,8 @@ def parseArgs(argv):
     parser.add_argument('--info', help='Information', action='store_true', required=False)
     parser.add_argument('--download', help='Download Default Version Client', action='store_true', required=False)
     parser.add_argument('--compile', help='Compile Target Client', action='store_true', required=False)
-    parser.add_argument('--test', help='Test Target Method', action='store_true', required=False)
+    parser.add_argument('--testold', help='Test Target Method', action='store_true', required=False)
+    parser.add_argument('--testnew', help='Test Target Method', action='store_true', required=False)
     parser.add_argument('--update', help='Update To New Version', action='store_true', required=False)
     parser.add_argument('--incompat', help='Incompat', action='store_true', required=False)
     parser.add_argument('--find', help='Find Infomation', action='store_true', required=False)
@@ -45,8 +46,12 @@ if __name__ == '__main__':
             compileTargetClient(opts.id)
             exit(0)
 
-        if opts.test:
-            TestTargetClient(opts.id)
+        if opts.testold:
+            TestTargetClientOld(opts.id)
+            exit(0)
+        
+        if opts.testnew:
+            TestTargetClientNew(opts.id)
             exit(0)
 
         if opts.update:

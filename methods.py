@@ -59,21 +59,86 @@ def compileTargetClient(id):
 
 
 
-def TestTargetClient(id):
-    k = findIncompatibilityById(id)
-    client, lib, test = k['client'], k['lib'], k['test']
+def TestTargetClientOld(id):
+    incomp = findIncompatibilityById(id)
+    client, lib, test, old, submodule, test, test_cmd = incomp['client'], incomp['lib'], incomp['test'], incomp['old'], incomp['submodule'], incomp['test'], incomp['test_cmd']
     
     print('===> Test Target Client --- id', id)
-    print('Current library: ', lib)
     
-    CURRENT_CLIENT = REPO_DIR + '/' + client
-    checkLibVersion(lib, CURRENT_CLIENT)
-    if not os.path.exists(CURRENT_CLIENT):
-        print('Download target client first!')
-    os.chdir(CURRENT_CLIENT)
-    print('===>' * 10)
+    old_tag = lib.replace(':', '--') + '-' + old
+    print(old_tag)
+    if submodule != 'N/A':
+        os.chdir(f'{REPO_DIR}/{client}/{submodule}')
+    else:
+        os.chdir(f'{REPO_DIR}/{client}')
+    sub.run(f'git checkout {old_tag}', shell=True)
 
-    sub.run('mvn test -D test=' + test, shell=True)
+    CLIENT_LIB_LOG_DIR = LOG_DIR + '/' + client + '/' + lib
+    if not os.path.exists(CLIENT_LIB_LOG_DIR):
+        os.makedirs(CLIENT_LIB_LOG_DIR)
+
+    old_test_log = CLIENT_LIB_LOG_DIR + '/' + old + '.log'
+    
+    if test_cmd != 'N/A':
+        sub.run(test_cmd, shell=True, stdout=open(old_test_log, 'w'), stderr=sub.STDOUT)    
+    else:
+        sub.run(f"mvn test -fn -Drat.ignoreErrors=true -DtrimStackTrace=false -DfailIfNoTests=false -Dtest={test}", shell=True, stdout=open(old_test_log, 'w'), stderr=sub.STDOUT)
+
+    print('===> Test Information --- id', id)
+    print(f"Client: {client}")
+    print(f"Library: {lib} {old}")
+    print(f"Test: {test}")
+    print("Result: ")
+    with open(old_test_log, 'r') as fo:
+        lines = fo.readlines()
+        for i in range(len(lines)):
+            if '<<< FAILURE!' in lines[i]:
+                print(lines[i])
+                print(lines[i + 1])
+        else:
+            print('TEST SUCCESS!')    
+
+
+def TestTargetClientNew(id):
+    incomp = findIncompatibilityById(id)
+    client, lib, test, new, submodule, test, test_cmd = incomp['client'], incomp['lib'], incomp['test'], incomp['new'], incomp['submodule'], incomp['test'], incomp['test_cmd']
+    
+    print('===> Test Target Client --- id', id)
+    
+    new_tag = lib.replace(':', '--') + '-' + new
+    print(new_tag)
+    if submodule != 'N/A':
+        os.chdir(f'{REPO_DIR}/{client}/{submodule}')
+    else:
+        os.chdir(f'{REPO_DIR}/{client}')
+    sub.run(f'git checkout {new_tag}', shell=True)
+
+    CLIENT_LIB_LOG_DIR = LOG_DIR + '/' + client + '/' + lib
+    if not os.path.exists(CLIENT_LIB_LOG_DIR):
+        os.makedirs(CLIENT_LIB_LOG_DIR)
+
+    new_test_log = CLIENT_LIB_LOG_DIR + '/' + new + '.log'
+    
+    if test_cmd != 'N/A':
+        sub.run(test_cmd, shell=True, stdout=open(new_test_log, 'w'), stderr=sub.STDOUT)    
+    else:
+        sub.run(f"mvn test -fn -Drat.ignoreErrors=true -DtrimStackTrace=false -DfailIfNoTests=false -Dtest={test}", shell=True, stdout=open(new_test_log, 'w'), stderr=sub.STDOUT)
+
+    print('===> Test Information --- id', id)
+    print(f"Client: {client}")
+    print(f"Library: {lib} {new}")
+    print(f"Test: {test}")
+    print("Result: ")
+    with open(new_test_log, 'r') as fo:
+        lines = fo.readlines()
+        for i in range(len(lines)):
+            if '<<< FAILURE!' in lines[i]:
+                print(lines[i], lines[i + 1])
+                break
+        else:
+            print('TEST SUCCESS!')  
+
+
 
 
 def updateToNewVersion(id):
