@@ -4,6 +4,7 @@ import subprocess as sub
 
 from utils import findIncompatibilityById
 from macros import REPO_DIR
+from macros import LOG_DIR
 
 def showInfomation(id):
     incomp = findIncompatibilityById(id)
@@ -15,7 +16,6 @@ def showInfomation(id):
 
 def downloadTargetClient(id):
     incomp = findIncompatibilityById(id)
-
     client, lib, sha, url = incomp['client'], incomp['lib'], incomp['sha'], incomp['url']
 
     print('===> Download Target Client --- id', id)
@@ -36,16 +36,27 @@ def downloadTargetClient(id):
 
 
 def compileTargetClient(id):
-    k = findIncompatibilityById(id)
-    client= k['client']
+    incomp = findIncompatibilityById(id)
+    client = incomp['client']
 
     print('===> Compile Target Client --- id', id)
     CURRENT_CLIENT = REPO_DIR + '/' + client
     if not os.path.exists(CURRENT_CLIENT):
         print('Download target client first!')
+        exit(0)
     os.chdir(CURRENT_CLIENT)
+    REPO_LOG = LOG_DIR + '/' + client
+    if not os.path.exists(REPO_LOG):
+        os.makedirs(REPO_LOG)
+    install_log = REPO_LOG + '/install.log'
+    sub.run('mvn install -DskipTests -fn', shell=True, stdout=open(install_log, 'w'), stderr=sub.STDOUT)
+    print('===> Client Info --- id', id)
+    if isCompiled(install_log):
+        print(f"{client} has been compiled successfully!")
+    else:
+        print(f"Compilation Failure")
 
-    sub.run('mvn install -DskipTests -fn', shell=True)
+
 
 
 def TestTargetClient(id):
@@ -182,3 +193,12 @@ def changeLibVersionOfOnePomFile(lib, version, pom_file):
     fw.write(''.join(lines))
     fw.close()
     
+def isCompiled(install_log):
+    with open(install_log, 'r') as f:
+        lines = f.readlines()
+    f.close()
+    for line in lines:
+        if 'BUILD SUCCESS' in line:
+            return True
+    else:
+        return False

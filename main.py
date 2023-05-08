@@ -29,6 +29,8 @@ if __name__ == '__main__':
 
     if not os.path.exists(REPO_DIR):
         os.makedirs(REPO_DIR)
+    if not os.path.exists(LOG_DIR):
+        os.makedirs(LOG_DIR)
 
     if opts.id:
         if opts.info:
