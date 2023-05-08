@@ -66,7 +66,6 @@ def TestTargetClientOld(id):
     print('===> Test Target Client --- id', id)
     
     old_tag = lib.replace(':', '--') + '-' + old
-    print(old_tag)
     if submodule != 'N/A':
         os.chdir(f'{REPO_DIR}/{client}/{submodule}')
     else:
@@ -104,7 +103,6 @@ def TestTargetClientNew(id):
     print('===> Test Target Client --- id', id)
     
     new_tag = lib.replace(':', '--') + '-' + new
-    print(new_tag)
     if submodule != 'N/A':
         os.chdir(f'{REPO_DIR}/{client}/{submodule}')
     else:
