@@ -46,11 +46,15 @@ if __name__ == '__main__':
         exit(0)
 
     if opts.testold:
-        TestTargetClientOld(opts.testold)
+        testTargetClientOld(opts.testold)
         exit(0)
     
     if opts.testnew:
-        TestTargetClientNew(opts.testnew)
+        testTargetClientNew(opts.testnew)
+        exit(0)
+    
+    if opts.incompat:
+        testTargetClientOldToNew(opts.incompat)
         exit(0)
 
 

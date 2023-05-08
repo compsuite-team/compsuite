@@ -59,7 +59,7 @@ def compileTargetClient(id):
 
 
 
-def TestTargetClientOld(id):
+def testTargetClientOld(id):
     incomp = findIncompatibilityById(id)
     client, lib, test, old, submodule, test, test_cmd = incomp['client'], incomp['lib'], incomp['test'], incomp['old'], incomp['submodule'], incomp['test'], incomp['test_cmd']
     
@@ -83,20 +83,19 @@ def TestTargetClientOld(id):
     else:
         sub.run(f"mvn test -fn -Drat.ignoreErrors=true -DtrimStackTrace=false -DfailIfNoTests=false -Dtest={test}", shell=True, stdout=open(old_test_log, 'w'), stderr=sub.STDOUT)
 
-    print(f'===> {old} Test Information --- id', id)
+    print(f'===> {old} Test Information --- id', id, '===>')
     print(f"Client: {client}; Library: {lib} {old}; Test: {test}")
     print("Result: ")
     with open(old_test_log, 'r') as fo:
         lines = fo.readlines()
         for i in range(len(lines)):
             if '<<< FAILURE!' in lines[i]:
-                print(lines[i])
-                print(lines[i + 1])
+                print(lines[i], lines[i + 1])
         else:
             print('TEST SUCCESS!')    
 
 
-def TestTargetClientNew(id):
+def testTargetClientNew(id):
     incomp = findIncompatibilityById(id)
     client, lib, test, new, submodule, test, test_cmd = incomp['client'], incomp['lib'], incomp['test'], incomp['new'], incomp['submodule'], incomp['test'], incomp['test_cmd']
     
@@ -120,11 +119,71 @@ def TestTargetClientNew(id):
     else:
         sub.run(f"mvn test -fn -Drat.ignoreErrors=true -DtrimStackTrace=false -DfailIfNoTests=false -Dtest={test}", shell=True, stdout=open(new_test_log, 'w'), stderr=sub.STDOUT)
 
-    print(f'===> {new} Test Information --- id', id)
+    print(f'===> {new} Test Information --- id', id, '===>')
     print(f"Client: {client}; Library: {lib} {new}; Test: {test}")
     print("Result: ")
-    with open(new_test_log, 'r') as fo:
+    with open(new_test_log, 'r') as fn:
+        lines = fn.readlines()
+        for i in range(len(lines)):
+            if '<<< FAILURE!' in lines[i]:
+                print(lines[i], lines[i + 1])
+                break
+        else:
+            print('TEST SUCCESS!')  
+
+
+def testTargetClientOldToNew(id):
+    incomp = findIncompatibilityById(id)
+    client, lib, test, old, new, submodule, test, test_cmd = incomp['client'], incomp['lib'], incomp['test'], incomp['old'], incomp['new'], incomp['submodule'], incomp['test'], incomp['test_cmd']
+    
+    print('===> Test Target Client --- id', id)
+    
+    old_tag = lib.replace(':', '--') + '-' + old
+    new_tag = lib.replace(':', '--') + '-' + new
+    if submodule != 'N/A':
+        os.chdir(f'{REPO_DIR}/{client}/{submodule}')
+    else:
+        os.chdir(f'{REPO_DIR}/{client}')
+    sub.run(f'git checkout {old_tag}', shell=True)
+
+    CLIENT_LIB_LOG_DIR = LOG_DIR + '/' + client + '/' + lib
+    if not os.path.exists(CLIENT_LIB_LOG_DIR):
+        os.makedirs(CLIENT_LIB_LOG_DIR)
+
+
+    old_test_log = CLIENT_LIB_LOG_DIR + '/' + old + '.log'
+    if test_cmd != 'N/A':
+        sub.run(test_cmd, shell=True, stdout=open(old_test_log, 'w'), stderr=sub.STDOUT)    
+    else:
+        sub.run(f"mvn test -fn -Drat.ignoreErrors=true -DtrimStackTrace=false -DfailIfNoTests=false -Dtest={test}", shell=True, stdout=open(old_test_log, 'w'), stderr=sub.STDOUT)
+    
+    sub.run(f'git checkout {new_tag}', shell=True)
+    new_test_log = CLIENT_LIB_LOG_DIR + '/' + new + '.log'
+    if test_cmd != 'N/A':
+        sub.run(test_cmd, shell=True, stdout=open(new_test_log, 'w'), stderr=sub.STDOUT)    
+    else:
+        sub.run(f"mvn test -fn -Drat.ignoreErrors=true -DtrimStackTrace=false -DfailIfNoTests=false -Dtest={test}", shell=True, stdout=open(new_test_log, 'w'), stderr=sub.STDOUT)
+
+
+
+    print(f'===> Old Test Information --- id', id, '===>')
+    print(f"Client: {client}; Library: {lib} {old}; Test: {test}")
+    print("Result: ")
+    with open(old_test_log, 'r') as fo:
         lines = fo.readlines()
+        for i in range(len(lines)):
+            if '<<< FAILURE!' in lines[i]:
+                print(lines[i], lines[i + 1])
+                break
+        else:
+            print('TEST SUCCESS!') 
+
+
+    print(f'===> New Test Information --- id', id, '===>')
+    print(f"Client: {client}; Library: {lib} {new}; Test: {test}")
+    print("Result: ")
+    with open(new_test_log, 'r') as fn:
+        lines = fn.readlines()
         for i in range(len(lines)):
             if '<<< FAILURE!' in lines[i]:
                 print(lines[i], lines[i + 1])
@@ -158,9 +217,9 @@ def findInfo(id):
 #     showInfomation(id)
 #     downloadTargetClient(id)
 #     compileTargetClient(id)
-#     TestTargetClient(id)
+#     testTargetClient(id)
 #     updateToNewVersion(id)
-#     TestTargetClient(id)
+#     testTargetClient(id)
 
 
 
