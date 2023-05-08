@@ -2,24 +2,23 @@ import os
 import re
 import subprocess as sub
 
-from utils import findKnowledgeClientByKid
-
+from utils import findIncompatibilityById
 from macros import REPO_DIR
 
-def showInfomation(kid):
-    k = findKnowledgeClientByKid(kid)
+def showInfomation(id):
+    incomp = findIncompatibilityById(id)
 
-    print('===> Display Knowledge Information --- id', kid)
-    client, sha, url, lib, old, new, test = k['client'], k['sha'], k['url'], k['lib'], k['old'], k['new'], k['test']
+    print('===> Display Incompatibility Information --- id', id)
+    client, sha, url, lib, old, new, test = incomp['client'], incomp['sha'], incomp['url'], incomp['lib'], incomp['old'], incomp['new'], incomp['test']
     print(f"client: {client}, \nsha: {sha}, \nurl: {url}, \nlib: {lib}, \nold version: {old}, \nnew version: {new}, \ntest: {test}")
 
 
-def downloadTargetClient(kid):
-    k = findKnowledgeClientByKid(kid)
+def downloadTargetClient(id):
+    k = findIncompatibilityById(id)
 
     client, sha, url = k['client'], k['sha'], k['url']
 
-    print('===> Download Target Client --- id', kid)
+    print('===> Download Target Client --- id', id)
     os.chdir(REPO_DIR)
     CURRENT_CLIENT = REPO_DIR + '/' + client
     if not os.path.exists(CURRENT_CLIENT):
@@ -28,11 +27,11 @@ def downloadTargetClient(kid):
     sub.run('git checkout ' + sha, shell=True)
 
 
-def compileTargetClient(kid):
-    k = findKnowledgeClientByKid(kid)
+def compileTargetClient(id):
+    k = findIncompatibilityById(id)
     client= k['client']
 
-    print('===> Compile Target Client --- id', kid)
+    print('===> Compile Target Client --- id', id)
     CURRENT_CLIENT = REPO_DIR + '/' + client
     if not os.path.exists(CURRENT_CLIENT):
         print('Download target client first!')
@@ -41,11 +40,11 @@ def compileTargetClient(kid):
     sub.run('mvn install -DskipTests -fn', shell=True)
 
 
-def TestTargetClient(kid):
-    k = findKnowledgeClientByKid(kid)
+def TestTargetClient(id):
+    k = findIncompatibilityById(id)
     client, lib, test = k['client'], k['lib'], k['test']
     
-    print('===> Test Target Client --- id', kid)
+    print('===> Test Target Client --- id', id)
     print('Current library: ', lib)
     
     CURRENT_CLIENT = REPO_DIR + '/' + client
@@ -58,10 +57,10 @@ def TestTargetClient(kid):
     sub.run('mvn test -D test=' + test, shell=True)
 
 
-def updateToNewVersion(kid):
-    k = findKnowledgeClientByKid(kid)
+def updateToNewVersion(id):
+    k = findIncompatibilityById(id)
 
-    print('===> Update Library To New Version --- id', kid)
+    print('===> Update Library To New Version --- id', id)
     client, lib, new, test = k['client'], k['lib'], k['new'], k['test']
 
     
@@ -72,12 +71,12 @@ def updateToNewVersion(kid):
         print('Download target client first!')
 
     
-def checkoutBefore(kid):
-    k = findKnowledgeClientByKid(kid)
+def checkoutBefore(id):
+    k = findIncompatibilityById(id)
 
     client, sha, url = k['client'], k['sha'], k['url']
 
-    print('===> Checkout to Before Version --- id', kid)
+    print('===> Checkout to Before Version --- id', id)
     os.chdir(REPO_DIR)
     CURRENT_CLIENT = REPO_DIR + '/' + client
     if not os.path.exists(CURRENT_CLIENT):
@@ -85,12 +84,12 @@ def checkoutBefore(kid):
     os.chdir(CURRENT_CLIENT)
     sub.run('git checkout before', shell=True)
 
-def checkoutAfter(kid):
-    k = findKnowledgeClientByKid(kid)
+def checkoutAfter(id):
+    k = findIncompatibilityById(id)
 
     client, sha, url = k['client'], k['sha'], k['url']
 
-    print('===> Checkout to After Version --- id', kid)
+    print('===> Checkout to After Version --- id', id)
     os.chdir(REPO_DIR)
     CURRENT_CLIENT = REPO_DIR + '/' + client
     if not os.path.exists(CURRENT_CLIENT):
@@ -98,12 +97,12 @@ def checkoutAfter(kid):
     os.chdir(CURRENT_CLIENT)
     sub.run('git checkout after', shell=True)
 
-def checkDiff(kid):
-    k = findKnowledgeClientByKid(kid)
+def checkDiff(id):
+    k = findIncompatibilityById(id)
 
     client, sha, url = k['client'], k['sha'], k['url']
 
-    print('===> Checkout to After Version --- id', kid)
+    print('===> Checkout to After Version --- id', id)
     os.chdir(REPO_DIR)
     CURRENT_CLIENT = REPO_DIR + '/' + client
     if not os.path.exists(CURRENT_CLIENT):
@@ -112,15 +111,21 @@ def checkDiff(kid):
     sub.run('git diff before after', shell=True)
 
 
+def findInfo(id):
+    pass
 
 
-def showIncompatibility(kid):
-    showInfomation(kid)
-    downloadTargetClient(kid)
-    compileTargetClient(kid)
-    TestTargetClient(kid)
-    updateToNewVersion(kid)
-    TestTargetClient(kid)
+def showIncompatibility(id):
+    showInfomation(id)
+    downloadTargetClient(id)
+    compileTargetClient(id)
+    TestTargetClient(id)
+    updateToNewVersion(id)
+    TestTargetClient(id)
+
+
+
+
 
 
 # ========= Auxiliary functions ==========

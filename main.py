@@ -1,11 +1,8 @@
 import argparse
 import sys
 
-from method import *
-# from discovery.discovery import runKnowledgeDiscovery
-
+from methods import *
 from macros import *
-
 
 
 def parseArgs(argv):
@@ -17,16 +14,15 @@ def parseArgs(argv):
     parser.add_argument('--test', help='Test Target Method', action='store_true', required=False)
     parser.add_argument('--update', help='Update To New Version', action='store_true', required=False)
     parser.add_argument('--incompat', help='Incompat', action='store_true', required=False)
-    parser.add_argument('--before', help='Checkout Before Version', action='store_true', required=False)
-    parser.add_argument('--after', help='Checkout After Version', action='store_true', required=False)
-    parser.add_argument('--diff', help='Different Between Two Versions', action='store_true', required=False)
-
+    parser.add_argument('--find', help='Find Infomation', action='store_true', required=False)
+    
 
     if len(argv) == 0:
         parser.print_help()
         exit(1)
     opts = parser.parse_args(argv)
     return opts
+
 
 if __name__ == '__main__':
     opts = parseArgs(sys.argv[1:])
@@ -59,33 +55,6 @@ if __name__ == '__main__':
             showIncompatibility(opts.id)
             exit(0)
 
-        if opts.before:
-            checkoutBefore(opts.id)
+        if opts.find:
+            findInfo(opts.id)
             exit(0)
-        
-        if opts.after:
-            checkoutAfter(opts.id)
-            exit(0)
-
-        if opts.diff:
-            checkDiff(opts.id)
-            exit(0)
-
-    # if opts.discover:
-    #     if opts.id:
-    #         runKnowledgeDiscoveryOnOneTest(opts.id)
-    #     else:
-    #         runKnowledgeDiscovery()
-    #     exit(0)
-    # if opts.merge:
-    #     mergeKnowledge()
-    #     exit(0)
-    # if opts.check:
-    #     if opts.id:
-    #         runCheckOnOneCallSite(opts.id)
-    #     exit(0)
-    # if opts.score:
-    #     genNumbersTexFile()
-    #     genTableTexFile()
-    #     exit(0)
-
