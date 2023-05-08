@@ -7,14 +7,14 @@ from macros import *
 
 def parseArgs(argv):
     parser = argparse.ArgumentParser()
-    parser.add_argument('--id', help='The Subject ID', required=False)
-    parser.add_argument('--info', help='Information', action='store_true', required=False)
-    parser.add_argument('--download', help='Download Default Version Client', action='store_true', required=False)
-    parser.add_argument('--compile', help='Compile Target Client', action='store_true', required=False)
-    parser.add_argument('--testold', help='Test Target Method', action='store_true', required=False)
-    parser.add_argument('--testnew', help='Test Target Method', action='store_true', required=False)
-    parser.add_argument('--update', help='Update To New Version', action='store_true', required=False)
-    parser.add_argument('--incompat', help='Incompat', action='store_true', required=False)
+    # parser.add_argument('--id', help='The Subject ID', required=False)
+    parser.add_argument('--info', help='Information', required=False)
+    parser.add_argument('--download', help='Download Default Version Client', required=False)
+    parser.add_argument('--compile', help='Compile Target Client', required=False)
+    parser.add_argument('--testold', help='Test Target Method', required=False)
+    parser.add_argument('--testnew', help='Test Target Method', required=False)
+    parser.add_argument('--incompat', help='Incompat', required=False)
+    # parser.add_argument('--diff', help='Difference between old and new version', action='store_true', required=False)
     parser.add_argument('--find', help='Find Infomation', action='store_true', required=False)
     
 
@@ -33,39 +33,60 @@ if __name__ == '__main__':
     if not os.path.exists(LOG_DIR):
         os.makedirs(LOG_DIR)
 
-    if opts.id:
-        if opts.info:
-            showInfomation(opts.id)
-            exit(0)
+    if opts.info:
+        showInfomation(opts.info)
+        exit(0)
 
-        if opts.download:
-            downloadTargetClient(opts.id)
-            exit(0)
+    if opts.download:
+        downloadTargetClient(opts.download)
+        exit(0)
 
-        if opts.compile:
-            compileTargetClient(opts.id)
-            exit(0)
+    if opts.compile:
+        compileTargetClient(opts.compile)
+        exit(0)
 
-        if opts.testold:
-            TestTargetClientOld(opts.id)
-            exit(0)
+    if opts.testold:
+        TestTargetClientOld(opts.testold)
+        exit(0)
+    
+    if opts.testnew:
+        TestTargetClientNew(opts.testnew)
+        exit(0)
+
+
+
+    # if opts.id:
+    #     if opts.info:
+    #         showInfomation(opts.id)
+    #         exit(0)
+
+    #     if opts.download:
+    #         downloadTargetClient(opts.id)
+    #         exit(0)
+
+    #     if opts.compile:
+    #         compileTargetClient(opts.id)
+    #         exit(0)
+
+    #     if opts.testold:
+    #         TestTargetClientOld(opts.id)
+    #         exit(0)
         
-        if opts.testnew:
-            TestTargetClientNew(opts.id)
-            exit(0)
+    #     if opts.testnew:
+    #         TestTargetClientNew(opts.id)
+    #         exit(0)
 
-        if opts.update:
-            updateToNewVersion(opts.id)
-            exit(0)
+    #     if opts.incompat:
+    #         downloadTargetClient(opts.id)
+    #         compileTargetClient(opts.id)
+    #         TestTargetClientOld(opts.id)
+    #         TestTargetClientNew(opts.id)
+    #         # showIncompatibility(opts.id)
+    #         exit(0)
 
-        if opts.incompat:
-            downloadTargetClient(opts.id)
-            compileTargetClient(opts.id)
-            TestTargetClientOld(opts.id)
-            TestTargetClientNew(opts.id)
-            # showIncompatibility(opts.id)
-            exit(0)
+    #     # if opts.diff:
+    #     #     pass
 
-        if opts.find:
-            findInfo(opts.id)
-            exit(0)
+    #     if opts.find:
+    #         findInfo(opts.id)
+    #         exit(0)
