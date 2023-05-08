@@ -59,7 +59,11 @@ if __name__ == '__main__':
             exit(0)
 
         if opts.incompat:
-            showIncompatibility(opts.id)
+            downloadTargetClient(opts.id)
+            compileTargetClient(opts.id)
+            TestTargetClientOld(opts.id)
+            TestTargetClientNew(opts.id)
+            # showIncompatibility(opts.id)
             exit(0)
 
         if opts.find:

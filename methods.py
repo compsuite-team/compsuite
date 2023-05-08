@@ -85,9 +85,7 @@ def TestTargetClientOld(id):
         sub.run(f"mvn test -fn -Drat.ignoreErrors=true -DtrimStackTrace=false -DfailIfNoTests=false -Dtest={test}", shell=True, stdout=open(old_test_log, 'w'), stderr=sub.STDOUT)
 
     print('===> Test Information --- id', id)
-    print(f"Client: {client}")
-    print(f"Library: {lib} {old}")
-    print(f"Test: {test}")
+    print(f"Client: {client}; Library: {lib} {old}; Test: {test}")
     print("Result: ")
     with open(old_test_log, 'r') as fo:
         lines = fo.readlines()
@@ -125,9 +123,7 @@ def TestTargetClientNew(id):
         sub.run(f"mvn test -fn -Drat.ignoreErrors=true -DtrimStackTrace=false -DfailIfNoTests=false -Dtest={test}", shell=True, stdout=open(new_test_log, 'w'), stderr=sub.STDOUT)
 
     print('===> Test Information --- id', id)
-    print(f"Client: {client}")
-    print(f"Library: {lib} {new}")
-    print(f"Test: {test}")
+    print(f"Client: {client}; Library: {lib} {new}; Test: {test}")
     print("Result: ")
     with open(new_test_log, 'r') as fo:
         lines = fo.readlines()
@@ -199,13 +195,13 @@ def findInfo(id):
     pass
 
 
-def showIncompatibility(id):
-    showInfomation(id)
-    downloadTargetClient(id)
-    compileTargetClient(id)
-    TestTargetClient(id)
-    updateToNewVersion(id)
-    TestTargetClient(id)
+# def showIncompatibility(id):
+#     showInfomation(id)
+#     downloadTargetClient(id)
+#     compileTargetClient(id)
+#     TestTargetClient(id)
+#     updateToNewVersion(id)
+#     TestTargetClient(id)
 
 
 
