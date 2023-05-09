@@ -54,6 +54,8 @@ if __name__ == '__main__':
         exit(0)
     
     if opts.incompat:
+        downloadTargetClient(opts.download)
+        compileTargetClient(opts.compile)
         testTargetClientOldToNew(opts.incompat)
         exit(0)
 
