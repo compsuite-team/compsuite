@@ -1,9 +1,9 @@
 [
   {
-    "id": "k1-1",
+    "id": "i-56",
     "client": "rtree",
     "sha": "7c6f20019d46ec21ea5df97597f1dea592a115e4",
-    "url": "https://github.com/compcheck/rtree",
+    "url": "https://github.com/compsuite-team/rtree",
     "lib": "com.esotericsoftware:kryo",
     "old": "3.0.3",
     "new": "5.0.0-RC4",
