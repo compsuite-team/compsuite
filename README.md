@@ -42,6 +42,7 @@ Execute test at base version and incompatible version.
 ```
 
 ## Reference
+If you would like to use CompSuite in your research, please cite our paper.
 ```
 @misc{xu2023compsuite,
       title={CompSuite: A Dataset of Java Library Upgrade Incompatibility Issues}, 
