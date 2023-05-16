@@ -41,4 +41,14 @@ Execute test at base version and incompatible version.
     python main.py --testmew [id]
 ```
 
-
+## Reference
+```
+@misc{xu2023compsuite,
+      title={CompSuite: A Dataset of Java Library Upgrade Incompatibility Issues}, 
+      author={Xiufeng Xu and Chenguang Zhu and Yi Li},
+      year={2023},
+      eprint={2305.08671},
+      archivePrefix={arXiv},
+      primaryClass={cs.SE}
+}
+```
