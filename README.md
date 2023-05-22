@@ -1,5 +1,5 @@
 # CompSuite
-CompSuite is the first incompatibility issue dataset focusing on library behavioral incompatibility with concrete reproducible test cases. 
+CompSuite is the first incompatibility issue dataset focusing on library behavioral incompatibility with concrete reproducible test cases. The demonstration video of \tool is available at \url{https://www.youtube.com/watch?v=7DQGsGs_65s}
 
 ## Install
 You can clone the repository to your local environment. Here we provide our operating environment for reference (Java 1.8; Maven 3.6.3; Python 3.11).
