@@ -44,12 +44,11 @@ Execute test at base version and incompatible version.
 ## Reference
 If you would like to use CompSuite in your research, please cite our paper.
 ```
-@misc{xu2023compsuite,
-      title={CompSuite: A Dataset of Java Library Upgrade Incompatibility Issues}, 
-      author={Xiufeng Xu and Chenguang Zhu and Yi Li},
-      year={2023},
-      eprint={2305.08671},
-      archivePrefix={arXiv},
-      primaryClass={cs.SE}
+@inproceedings{Xu2023CAD,
+  author = {Xu, Xiufeng and Zhu, Chenguang and Li, Yi},
+  booktitle = {Proceedings of the 38th IEEE/ACM International Conference on Automated Software Engineering (ASE)},
+  month = sep,
+  title = {{CompSuite}: A Dataset of Java Library Upgrade Incompatibility Issues},
+  year = {2023}
 }
 ```
